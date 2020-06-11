@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css'%}">
+    <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js'%}"></script>
+
+</head>
+<body>
+  home page
+  <br>
+  <br>
+<div class="container">
+    <form method='PUT' id="article_form" action="">
+      {% csrf_token %}
+
+      <textarea name="content" id="content">
+      	{{article.content}}
+      </textarea>
+       <button id="button" class="btn btn-success">submit</button>
+   </form> 
+</div>
+
+ 
+
+ <script type="text/javascript">
+ $(document).on('submit', '#article_form', function(e){
+  e.preventDefault();
+  var articleForm = $(this)
+  var registerFormData = new FormData(articleForm[0])
+
+       $.ajax({
+              type:'PUT',
+              url : 'api/api/article/_id_',
+              data: registerFormData,
+              async:true,
+              contentType:false,
+              processData:false,
+              cache:false,
+              
+            success:function(data){
+                alert('success');
+            },
+
+            error:function(errMsg){
+                    console.log(errMsg);
+                }
+          });
+  
+});
+
+ </script>
+
+</body>
+</html>

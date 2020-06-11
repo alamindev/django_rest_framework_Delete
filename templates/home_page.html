@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css'%}">
+    <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js'%}"></script>
+
+
+</head>
+<body>
+  home page
+  
+  <div class="test">
+   <br>
+  </div>
+<script type="text/javascript">
+  var  get_update_csrf = '{{ csrf_token }}'
+  var url ="{% url 'main_url:drfapp_url:api_folder_urls:router_register_drfapp-list' %}"
+  console.log(url);
+  $.ajax({
+      url:url,
+      type:'GET',
+      data:'json',
+      success:function(data){
+        if(data.length > 0){
+          $.each(data, function(i, item){
+           $('.test').append("<span class='show1'>"+ data[i].created_by.email +"</span")
+           $('.test').append("<span class='show2'>"+ data[i].content +"</span")
+           $('.test').append("<span class='show3'>"+ data[i].created_date +"</span")
+           $('.test').append("<button data-url='' data-id= "+ data[i].id +" class='delete' >button</span")
+           console.log(data[i].id);
+          })
+          
+        }else{
+            console.log(data);
+          }
+      }
+  });
+
+$(document).on('click', '.delete', function(){
+    var contentid = $(this).attr('data-id');
+    console.log(contentid);
+    var deleteid = this_delete_fun(contentid);
+    console.log(deleteid);
+    $('.delete').attr('data-url',deleteid);
+
+    url = $(this).attr('data-url');
+    console.log(url);
+    $.ajax({
+      url:url,
+      type:'DELETE',
+      beforeSend:function(xhr){
+          xhr.setRequestHeader("X-CSRFToken", get_update_csrf);
+        },
+      success:function(){
+        alert('success');
+    }
+  })
+});
+
+var this_delete_fun =function(id){
+     var leave_api_obj = "{% url 'main_url:drfapp_url:api_folder_urls:router_register_drfapp-detail' '0' %}"
+        leave_api_obj = leave_api_obj.slice(0,-2)    //to remove demo value '0' from ur
+        leave_api_obj = leave_api_obj + id +'/'
+        return leave_api_obj    
+    }
+
+$(document).on('click', '.delete', function(){
+  
+});
+
+</script>
+
+
+
+
+
+</body>
+</html>
